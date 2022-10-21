@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+    </head>
+
+    <body>
+        <button id="selectPort"> Selecione a porta </button>
+
+        <script type= "text/javascript" src="js/serial.js"></script>
+
+        <script>
+
+            document
+                .getElementById("selectPort")
+                .addEventListener('click', async () =>{
+                    await selectPort();
+                });
+        </script>
+    </body>
+</html>

@@ -1,20 +1,91 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
+        <style>
+            :root{
+                --font-family:"Segoe UI", Helvetica,Arial,sans-serif;
+            }
+            *,*:after,*:before{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            #selectPort{
+                width: 100%;
+                display: inline-flex;
+                border: 1px solid grey;
+                border-radius: .25rem;
+                align-items: center;
+                align-content: center;
+                justify-content: center;
+                line-height: 2.5;
+                font-size: 1.125rem;
+                font-family: var(--font-family);
+                padding: 0 1rem;
+            }
+            #weight-div{
+                border-radius: 1.25rem;
+                background-color: #666666;
+                display: flex;
+                flex-direction: column;
+                gap: .5rem;
+                align-items: center;
+                align-content: center;
+                justify-content: center;
+            }
+            #weight-text{
+                font-family: "Arial";
+                color: #FF0000;
+                font-size: 2rem;
+                font-weight: bold;
+                line-height: 2;
+                margin: 0;
+                width:100%;
+                text-align: center;
+
+            }
+            #logArea {
+                margin: auto;
+                width: 100%;
+                border: 1px solid grey;
+                border-radius: .25rem;
+                font-family: var(--font-family);
+                height: 10rem;
+            }
+            #main_div{
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 2rem;
+                margin: 2rem;
+                border: 1px solid grey;
+                max-width: 30rem;
+            }
+            #copyToClipboard{
+                margin-left: auto;
+                display: inline-flex;
+                border: 1px solid grey;
+                border-radius: .25rem;
+                align-items: center;
+                align-content: center;
+                justify-content: center;
+                font-family: var(--font-family);
+                padding: 0 1rem;
+            }
+        </style>
     </head>
 
     <body>
-        <button id="selectPort"> Selecione a porta </button>
-
+        <div id="main_div">
+            <button id="selectPort"> Selecione a porta </button>
+            <div id="weight-div">
+                <p id="weight-text"> - - - - - - - </p>
+            </div>
+            <div>
+                <textarea id="logArea" disabled ></textarea>
+            </div>
+            <button id="copyToClipboard"> Copiar texto</button>
+    </div>
         <script type= "text/javascript" src="js/serial.js"></script>
-
-        <script>
-
-            document
-                .getElementById("selectPort")
-                .addEventListener('click', async () =>{
-                    await selectPort();
-                });
-        </script>
     </body>
 </html>

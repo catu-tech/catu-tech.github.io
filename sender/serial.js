@@ -19,7 +19,7 @@ var port;
 
 async function selectPort ()
 {
-    // await closePort();
+    await closePort();
     if(  !("serial" in navigator)  )
     {
         alert("Navegador não e compativel");

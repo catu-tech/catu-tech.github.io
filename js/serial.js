@@ -36,7 +36,7 @@ async function selectPort ()
 {
     if(port !== null)
     {
-       closePort();
+        closePort();
     }
     if(  !("serial" in navigator)  )
     {
@@ -50,18 +50,22 @@ async function selectPort ()
         ev.returnValue = "Chrome/Blink/Webkit";
         return "Firefox/IE";
     });
-    readSerialPort2 ();
+    readSerialPort ();
 }
 
 
 async function closePort()
 {
-    // await port.close();
+    if(port !== undefined){
+        await port.close();
+        port = undefined;
+    }
 }
 
 async function readSerialPort ()
 {
 
+    var protocol = [];
     while(port.readable)
     {
         // const reader = port.readable.getReader();
@@ -73,18 +77,26 @@ async function readSerialPort ()
         try{
             while(true){
                 const {value, done} = await reader.read();
-                console.log(done);
                 if (done) {
                     // Allow the serial port to be closed later.
                     reader.releaseLock();
                     break;
                 }
                 if(value) {
-                    console.log(value);
-                    var textArea = document.getElementById("logArea");
-                    textArea.value += value + "\n";
-                    textArea.scrollTop = textArea.scrollHeight;
-                    parseProtocol(value);
+                    protocol.push(value);
+                    var string_protocol = protocol.join('');
+                    if(/[\r\n]/g.test(string_protocol))// procura /n /r e finaliza
+                    {
+                        if(string_protocol.length > 3 )
+                        {
+                            var textArea = document.getElementById("logArea");
+                            textArea.value += string_protocol;
+                            parseProtocol(string_protocol);
+                            textArea.scrollTop = textArea.scrollHeight;
+                        }
+                        protocol =[];
+                    }
+
                 }
             }
         }
@@ -99,16 +111,18 @@ async function readSerialPort ()
 function parseProtocol(protocol)
 {
     let weight;
-    if(protocol.length == 18)
+    if(protocol.length > 10)
     {
         weight = protocol.substring(4,13);
+        document.getElementById("weight-text").innerHTML  = weight + ' Kg';
     }
-    if(protocol.length == 11)
+    else if(protocol.length > 5)
     {
         weight = protocol.substring(1,7);
+        document.getElementById("weight-text").innerHTML  = weight + ' Kg';
     }
 
-    document.getElementById("weight-text").value = weight + ' Kg';
+
 }
 
 

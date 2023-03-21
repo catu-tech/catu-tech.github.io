@@ -1,14 +1,14 @@
 import SerialParser, { BAUD_RATES } from "@/lib/SerialParser";
-import {
-  SpeedTwoTone
-} from "@mui/icons-material";
+import { SpeedTwoTone } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Alert,
-  Box, Grid,
-  LinearProgress, Paper,
+  Box,
+  Grid,
+  LinearProgress,
+  Paper,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
@@ -35,6 +35,7 @@ const SerialDumperRoutine = (): JSX.Element => {
       await setValues(new Uint8Array());
 
       const baudRate = BAUD_RATES[n];
+      setCurrentBaudRate(baudRate);
 
       if (reader) reader.data = [];
       await reader?.closePort();
@@ -62,6 +63,8 @@ const SerialDumperRoutine = (): JSX.Element => {
     await zip.generateAsync({ type: "blob" }).then((content: any) => {
       saveAs(content, `${date}-dump.zip`);
     });
+
+    setCurrentBaudRate(-1);
 
     await reader?.closePort();
     setExecuting(false);
@@ -183,6 +186,27 @@ const SerialDumperRoutine = (): JSX.Element => {
               onClick={executeRoutine}>
               Iniciar Rotina
             </LoadingButton>
+
+            {currentBaudRate > 0 && (
+              <Typography variant="h6" sx={{ my: 2 }}>
+                Realizando leitura de dados em
+                <br />
+                <Typography
+                  color={"#edd400"}
+                  variant="h6"
+                  sx={{ display: "inline" }}>
+                  {currentBaudRate}
+                </Typography>{" "}
+                baud rates (
+                <Typography
+                  color={"#edd400"}
+                  variant="h6"
+                  sx={{ display: "inline" }}>
+                  {currentBaudRate / 1000}kbps
+                </Typography>
+                ).
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={12} md={8}>
             <TextField

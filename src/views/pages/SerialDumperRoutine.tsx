@@ -1,38 +1,27 @@
 import SerialParser, { BAUD_RATES } from "@/lib/SerialParser";
-import { formatNumber } from "@/utlis";
 import {
-  CableTwoTone,
-  CloseTwoTone,
-  SaveTwoTone,
-  SpeedTwoTone,
+  SpeedTwoTone
 } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Alert,
-  Box,
-  Button,
-  Divider,
-  Grid,
-  LinearProgress,
-  MenuItem,
-  Paper,
+  Box, Grid,
+  LinearProgress, Paper,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
 
 const SerialDumperRoutine = (): JSX.Element => {
   const [currentBaudRate, setCurrentBaudRate] = useState<number>(-1);
   const [executing, setExecuting] = useState<boolean>(false);
 
   const [active, setActive] = useState<boolean>(false);
-  const [baudRate, setBaudRate] = useState<number>(BAUD_RATES[6]);
   const [reader, setReader] = useState<SerialParser | null>(null);
   const [values, setValues] = useState<Uint8Array>(new Uint8Array());
-  const [textValues, setTextValues] = useState<Record<string, any>>({});
   const decoder = new TextDecoder();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -47,22 +36,21 @@ const SerialDumperRoutine = (): JSX.Element => {
 
       const baudRate = BAUD_RATES[n];
 
+      if (reader) reader.data = [];
       await reader?.closePort();
       await reader?.selectPort(baudRate, true);
-      if (reader) reader.data = [];
 
       const promised = new Promise((resolve) => {
         setTimeout(() => {
           valuesMap[baudRate] = reader?.data || [];
 
           resolve(null);
-        }, 5000);
+        }, 20000);
       });
 
       await promised;
     }
 
-    console.log(valuesMap);
     const date = new Date().getTime();
     let zip = new JSZip();
     Object.keys(valuesMap).forEach((key) => {
@@ -71,7 +59,7 @@ const SerialDumperRoutine = (): JSX.Element => {
       zip.file(file, data);
     });
 
-    await zip.generateAsync({ type: "blob" }).then((content) => {
+    await zip.generateAsync({ type: "blob" }).then((content: any) => {
       saveAs(content, `${date}-dump.zip`);
     });
 
@@ -79,27 +67,9 @@ const SerialDumperRoutine = (): JSX.Element => {
     setExecuting(false);
   }
 
-  function connect() {
-    reader?.selectPort(baudRate, true);
-  }
-
-  async function changeBaudRate() {
-    await reader?.closePort();
-    reader?.selectPort(baudRate, true);
-  }
-
-  function downloadSerialDump() {
-    const linkElement = document.createElement("a");
-    const fileContent = new Blob([values.join("")], { type: "text/plain" });
-    linkElement.href = URL.createObjectURL(fileContent);
-    linkElement.download = `serial-dump-${new Date().getTime()}.txt`;
-    linkElement.click();
-    URL.revokeObjectURL(linkElement.href);
-  }
-
   useEffect(() => {
     if (reader) {
-      reader.setCallback((values) => {
+      reader.setCallback((values: Array<any>) => {
         const valueArray = new Uint8Array(values.length);
         valueArray.set(values);
         setValues(valueArray);

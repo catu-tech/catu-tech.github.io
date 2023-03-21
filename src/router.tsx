@@ -1,4 +1,4 @@
-import { createBrowserRouter, useNavigate, useRoutes } from "react-router-dom";
+import { createBrowserRouter, createHashRouter, useNavigate, useRoutes } from "react-router-dom";
 import Root from "@/views/Root";
 import ErrorPage from "@/views/ErrorPage";
 import Home from "@/views/pages/Home";
@@ -22,7 +22,7 @@ const LogoutScreen = () => {
   return <></>;
 };
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Root />,

@@ -2,6 +2,7 @@ import {
   HomeTwoTone,
   LogoutTwoTone,
   PinDropTwoTone,
+  PrintTwoTone,
   TerminalTwoTone,
 } from "@mui/icons-material";
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
@@ -35,6 +36,13 @@ export const mainMenu = (
         <TerminalTwoTone />
       </ListItemIcon>
       <ListItemText primary="Serial Routine" />
+    </ListItemButton>
+
+    <ListItemButton component={RouterLink} to={"/pdf-print-test"}>
+      <ListItemIcon>
+        <PrintTwoTone />
+      </ListItemIcon>
+      <ListItemText primary="Pdf Print Test" />
     </ListItemButton>
 
     <ListItemButton component={RouterLink} to={"/logout"}>

@@ -9,6 +9,7 @@ import SerialDumperRoutine from "@/views/pages/SerialDumperRoutine";
 import SerialSender from "@/views/pages/SerialSender";
 import { removeStorage } from "./lib/GenericStorage";
 import { useEffect } from "react";
+import PdfPrintTest from "./views/pages/PdfPrintTest";
 
 const LogoutScreen = () => {
   const navigate = useNavigate();
@@ -43,6 +44,10 @@ const router = createHashRouter([
       {
         path: "/serial-sender",
         element: <SerialSender />,
+      },
+      {
+        path: "/pdf-print-test",
+        element: <PdfPrintTest />,
       },
       // {
       //   path: "/map-editor",

@@ -93,7 +93,7 @@ const CatuPdfHeaderWrapper = ({
           size={1}
           style={{ padding: "1mm", borderLeft: "1px solid #000" }}>
           <Image
-            src={barCode}
+            src={barCode as any}
             style={{
               maxWidth: "100%",
               width: "18mm",

@@ -25,7 +25,7 @@ const SerialDumperRoutine = (): JSX.Element => {
   const [reader, setReader] = useState<SerialParser | null>(null);
   const [values, setValues] = useState<Uint8Array>(new Uint8Array());
   const [dataBitsConfig, setDataBitsConfig] = useState<number>(8);
-  const [parityConfig, setParityConfig] = useState<string>("none")
+  const [parityConfig, setParityConfig] = useState<ParityType>("none")
 
   const decoder = new TextDecoder();
 
@@ -48,7 +48,7 @@ const SerialDumperRoutine = (): JSX.Element => {
   }
 
   function handleParityChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const value = e?.target?.value;
+    const value = e?.target?.value as ParityType;
 
     if (!value) {
       setParityConfig("none")

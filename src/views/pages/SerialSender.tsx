@@ -31,12 +31,12 @@ const SerialSender = (): JSX.Element => {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   function connect() {
-    sender?.selectPort(baudRate, 8, "none");
+    sender?.selectPort(baudRate, 8, "none", 1);
   }
 
   async function changeBaudRate() {
     await sender?.closePort();
-    sender?.selectPort(baudRate, 8, "none");
+    sender?.selectPort(baudRate, 8, "none", 1);
   }
 
   useEffect(() => {

@@ -25,6 +25,7 @@ const SerialDumperRoutine = (): JSX.Element => {
   const [reader, setReader] = useState<SerialParser | null>(null);
   const [values, setValues] = useState<Uint8Array>(new Uint8Array());
   const [dataBitsConfig, setDataBitsConfig] = useState<number>(8);
+  const [stopBitConfig, setStopBitConfig] = useState<number>(1);
   const [parityConfig, setParityConfig] = useState<ParityType>("none")
 
   const decoder = new TextDecoder();
@@ -45,6 +46,19 @@ const SerialDumperRoutine = (): JSX.Element => {
     if (isNaN(parsedValue)) return
 
     setDataBitsConfig(parsedValue);
+  }
+
+  function handleStopBitChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const value = e?.target?.value
+
+    if (![1, 2, "1", "2"].includes(value)) {
+      console.error("Out of scope value for Stop Bits")
+      return
+    }
+
+    const parsedValue = parseInt(value)
+
+    setStopBitConfig(parsedValue)
   }
 
   function handleParityChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -70,7 +84,7 @@ const SerialDumperRoutine = (): JSX.Element => {
 
       if (reader) reader.data = [];
       await reader?.closePort();
-      await reader?.selectPort(baudRate, dataBitsConfig, parityConfig, true);
+      await reader?.selectPort(baudRate, dataBitsConfig, parityConfig, stopBitConfig, true);
 
       const promised = new Promise((resolve) => {
         setTimeout(() => {
@@ -210,32 +224,47 @@ const SerialDumperRoutine = (): JSX.Element => {
           <Grid item xs={12} md={4}>
             <Stack direction="column" spacing={1}>
               <Stack direction="row" spacing={1}>
-              <TextField
-                disabled={executing}
-                fullWidth
-                label="Data Bits"
-                size="small"
-                variant="standard"
-                onFocus={(e) => e?.target?.select()}
-                onChange={handleDataBitsConfigChange}
-                value={dataBitsConfig}
-              />
+                <TextField
+                  disabled={executing}
+                  fullWidth
+                  label="Data Bits"
+                  size="small"
+                  variant="standard"
+                  onFocus={(e) => e?.target?.select()}
+                  onChange={handleDataBitsConfigChange}
+                  value={dataBitsConfig}
+                />
 
-              <TextField
-                disabled={executing}
-                select
-                fullWidth
-                label="Paridade"
-                size="small"
-                variant="standard"
-                value={parityConfig}
-                onChange={handleParityChange}
-              >
-                <MenuItem value="none">-</MenuItem>
-                <MenuItem value="even">Par</MenuItem>
-                <MenuItem value="odd">Ímpar</MenuItem>
-              </TextField>
+                <TextField
+                  disabled={executing}
+                  select
+                  fullWidth
+                  label="Paridade"
+                  size="small"
+                  variant="standard"
+                  value={parityConfig}
+                  onChange={handleParityChange}
+                >
+                  <MenuItem value="none">-</MenuItem>
+                  <MenuItem value="even">Par</MenuItem>
+                  <MenuItem value="odd">Ímpar</MenuItem>
+                </TextField>
+
+                <TextField
+                  disabled={executing}
+                  select
+                  fullWidth
+                  label="Stop Bits"
+                  size="small"
+                  variant="standard"
+                  value={stopBitConfig}
+                  onChange={handleStopBitChange}
+                >
+                  <MenuItem value={1}>1</MenuItem>
+                  <MenuItem value={2}>2</MenuItem>
+                </TextField>
               </Stack>
+
 
               <LoadingButton
                 startIcon={<SpeedTwoTone />}

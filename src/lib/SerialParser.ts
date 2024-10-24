@@ -246,7 +246,7 @@ export default class SerialParser {
    * @param keepPreviousPortOpen
    *     Whether to keep the previous port identifier open or not
    */
-  async selectPort(baud: number = 9600, dataBits: number, parity: ParityType, keepPreviousPortOpen: boolean = false) {
+  async selectPort(baud: number = 9600, dataBits: number, parity: ParityType, stopBits: number, keepPreviousPortOpen: boolean = false) {
     await this.closePort();
 
     let port: SerialPort;
@@ -257,7 +257,7 @@ export default class SerialParser {
       port = await navigator.serial.requestPort();
     }
 
-    await port.open({ baudRate: baud || 9600, dataBits: dataBits || 8, parity: parity || "none" });
+    await port.open({ baudRate: baud || 9600, dataBits: dataBits || 8, parity: parity || "none", stopBits: stopBits });
 
     SerialParser.BAUD = baud;
     SerialParser.PORT = port;

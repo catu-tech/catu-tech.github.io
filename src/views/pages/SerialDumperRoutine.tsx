@@ -41,7 +41,7 @@ const SerialDumperRoutine = (): JSX.Element => {
       await reader?.closePort();
 
       // review
-      await reader?.selectPort(baudRate, 8, "none", true);
+      await reader?.selectPort(baudRate, 8, "none", 1, true);
 
       const promised = new Promise((resolve) => {
         setTimeout(() => {

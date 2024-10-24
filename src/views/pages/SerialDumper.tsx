@@ -31,12 +31,12 @@ const SerialDumper = (): JSX.Element => {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   function connect() {
-    reader?.selectPort(baudRate);
+    reader?.selectPort(baudRate, 8, "none");
   }
 
   async function changeBaudRate() {
     await reader?.closePort();
-    reader?.selectPort(baudRate);
+    reader?.selectPort(baudRate, 8, "none");
   }
 
   function downloadSerialDump() {

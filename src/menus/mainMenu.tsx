@@ -5,7 +5,7 @@ import {
   PrintTwoTone,
   TerminalTwoTone,
 } from "@mui/icons-material";
-import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Box, Chip, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
 export const mainMenu = (
@@ -36,6 +36,32 @@ export const mainMenu = (
         <TerminalTwoTone />
       </ListItemIcon>
       <ListItemText primary="Serial Routine" />
+    </ListItemButton>
+
+    <ListItemButton component={RouterLink} to={"/neo-serial-dumper-routine"}>
+      <ListItemIcon>
+      <Box display="flex" sx={{ position: "relative" }}>
+        <TerminalTwoTone />
+        <Chip
+          label="Beta"
+          size="small"
+          color="warning"
+          sx={{
+            position: "absolute",
+            bottom: 0,
+            right: -8,
+            fontSize: "8px",
+            minWidth: 0,
+            minHeight: 0,
+            height: "fit-content",
+            ".MuiChip-label": {
+              px: "2px",
+            }
+          }}
+        />
+      </Box>
+      </ListItemIcon>
+        <ListItemText primary="New Serial Routine" />
     </ListItemButton>
 
     <ListItemButton component={RouterLink} to={"/pdf-print-test"}>

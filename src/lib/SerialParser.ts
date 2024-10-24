@@ -246,7 +246,7 @@ export default class SerialParser {
    * @param keepPreviousPortOpen
    *     Whether to keep the previous port identifier open or not
    */
-  async selectPort(baud: number = 9600, keepPreviousPortOpen: boolean = false) {
+  async selectPort(baud: number = 9600, dataBits: number, parity: string, keepPreviousPortOpen: boolean = false) {
     await this.closePort();
 
     let port: SerialPort;

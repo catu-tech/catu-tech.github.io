@@ -10,6 +10,7 @@ import SerialSender from "@/views/pages/SerialSender";
 import { removeStorage } from "./lib/GenericStorage";
 import { useEffect } from "react";
 import PdfPrintTest from "./views/pages/PdfPrintTest";
+import NeoSerialDumperRoutine from "./views/pages/NeoSerialDumperRoutine";
 
 const LogoutScreen = () => {
   const navigate = useNavigate();
@@ -42,6 +43,10 @@ const router = createHashRouter([
         element: <SerialDumperRoutine />,
       },
       {
+        path: "/neo-serial-dumper-routine",
+        element: <NeoSerialDumperRoutine />,
+      },
+      {
         path: "/serial-sender",
         element: <SerialSender />,
       },
@@ -49,6 +54,7 @@ const router = createHashRouter([
         path: "/pdf-print-test",
         element: <PdfPrintTest />,
       },
+
       // {
       //   path: "/map-editor",
       //   element: <MapEditor />,

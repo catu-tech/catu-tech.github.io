@@ -1,4 +1,5 @@
 import SerialParser, { BAUD_RATES } from "@/lib/SerialParser";
+import { formatNumber } from "@/utlis";
 import { SpeedTwoTone } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -27,6 +28,7 @@ const SerialDumperRoutine = (): JSX.Element => {
   const [dataBitsConfig, setDataBitsConfig] = useState<number>(8);
   const [stopBitConfig, setStopBitConfig] = useState<number>(1);
   const [parityConfig, setParityConfig] = useState<ParityType>("none")
+  const [baudRate, setBaudRate] = useState<number>(0);
 
   const decoder = new TextDecoder();
 
@@ -79,16 +81,16 @@ const SerialDumperRoutine = (): JSX.Element => {
     for (let n = 0; n < BAUD_RATES.length; n++) {
       await setValues(new Uint8Array());
 
-      const baudRate = BAUD_RATES[n];
-      setCurrentBaudRate(baudRate);
+      const baudRateToUse = baudRate ? baudRate : BAUD_RATES[n];
+      setCurrentBaudRate(baudRateToUse);
 
       if (reader) reader.data = [];
       await reader?.closePort();
-      await reader?.selectPort(baudRate, dataBitsConfig, parityConfig, stopBitConfig, true);
+      await reader?.selectPort(baudRateToUse, dataBitsConfig, parityConfig, stopBitConfig, true);
 
       const promised = new Promise((resolve) => {
         setTimeout(() => {
-          valuesMap[baudRate] = reader?.data || [];
+          valuesMap[baudRateToUse] = reader?.data || [];
 
           resolve(null);
         }, 20000);
@@ -265,6 +267,23 @@ const SerialDumperRoutine = (): JSX.Element => {
                 </TextField>
               </Stack>
 
+
+            <TextField
+              label={"Baud Rate (kbps)"}
+              size="small"
+              variant="standard"
+              fullWidth
+              select
+              value={baudRate}
+              onChange={(event) => {
+                setBaudRate(event.target.value as any);
+              }}>
+              {BAUD_RATES.map((rate) => (
+                <MenuItem key={rate} value={rate}>
+                  {formatNumber(rate)} ({formatNumber(rate / 1000)} kbps)
+                </MenuItem>
+              ))}
+            </TextField>
 
               <LoadingButton
                 startIcon={<SpeedTwoTone />}
